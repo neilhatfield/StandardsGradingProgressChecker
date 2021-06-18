@@ -1,0 +1,17 @@
+Title: Standards Based Grading Progress Checker Apps
+ShortName: Progress Check
+Date: 2021-01-20
+Lifecycle: experimental
+Authors@R: c(
+    person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("aut", "cre")),
+    person(given = "Robert", family = "Carey", email = "rpc5102@psu.edu", role = c("ctb"))
+  )
+Chapter: None
+Description: This app is where students can check their progress in a standards based grading version of STAT 461.
+LearningObjectives: c("None")
+DisplayMode: Normal
+URL: omitted
+BugReports: https://github.com/neilhatfield/StandardsGradingProgressChecker/issues
+License: CC-BY-NC-SA-4.0
+Tags: Progress Check
+Type: Shiny
