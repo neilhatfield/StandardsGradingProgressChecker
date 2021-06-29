@@ -35,9 +35,9 @@ For this app, I've set up the general directory structure as follows:
 + .Renviron (This contains security and authentication information; you'll need to create this)
 + README.md and DESCRIPTION
 + dataFiles Directory
-  - Encrypted data frames (attendance and gradebook)
-  - login list with classifications
-    - Classifications include student, special (for app development), and teacher
+  - Encrypted data frames (logins, attendance, and gradebook)
+  - The login data frame needs to include classifications for each approved user
+    - Classifications include "student", "special"" (for app development), and "teacher""
   - list of learning outcomes and objectives
 + localOnly Directory (does not get loaded to your Shiny server)
   - gradebookPrep.R (contains the scripts you would use to encrypt data)

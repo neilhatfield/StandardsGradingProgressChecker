@@ -2,7 +2,24 @@ library(openxlsx)
 library(dplyr)
 library(openssl)
 
-# Encryption Information ---
+# Login Uses Separate key ----
+loginPass <- "setThisToSomething"
+loginKey <- sha256(charToRaw(loginPass))
+
+# Load Login----
+rawLogins <- openxlsx::readWorkbook(xlsxFile = "localOnly/loginsFake.xlsx")
+
+# Encrypt and Save Logins----
+encryptedLogins <- aes_cbc_encrypt(
+  serialize(rawLogins, NULL),
+  key = loginKey
+)
+
+saveRDS(encryptedLogins, "dataFiles/encryptedLogins.rds")
+
+remove(list = c("rawLogins", "encryptedLogins"))
+
+# Encryption For Gradebook and Attendance Information ---
 passphrase <- "setThisToSomething"
 key <- sha256(charToRaw(passphrase))
 
@@ -38,4 +55,4 @@ saveRDS(encryptedGrades, "dataFiles/encryptedGrades.rds")
 remove(list = c("rawGradeBook", "encryptedGrades"))
 
 # Clean up ----
-remove(list = c("key","passphrase"))
+remove(list = c("key","passphrase", "loginPass", "loginKey"))

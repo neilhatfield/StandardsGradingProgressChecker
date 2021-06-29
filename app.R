@@ -18,13 +18,14 @@ library(colorspace)
 # have left placeholders so that you can get a sense of what you would need to do.
 
 # Global Constants, Data, and Functions ----
-## I'v replaced the values here with prompts
+## I've replaced the values here with prompts
+LOGKEY <- openssl::sha256(charToRaw(Sys.getenv("nameOfKeyForLogins")))
 KEY <- openssl::sha256(charToRaw(Sys.getenv("nameOfKey")))
 TENANT <- Sys.getenv("nameOfTenantID")
 APP_ID <- Sys.getenv("nameOfAuthenticationApp")
 REDIRECT <- "urlOfShinyApp"
 
-## Read in Outcomes
+## Read in Outcomes ----
 outcomes <- openxlsx::read.xlsx(xlsxFile = "dataFiles/outcomes.xlsx")
 objectives <- outcomes %>%
   dplyr::filter(type == "objective") %>%
@@ -34,14 +35,16 @@ outcomes <- outcomes %>%
   dplyr::select(prefix, title, description)
 outcomeCounts <- table(outcomes$prefix)
 
-## Read in Logins
-logins <- openxlsx::readWorkbook(xlsxFile = "dataFiles/logins.xlsx")
+## Read in Data Files ----
+### Log ins
+encyptedLogins <- readRDS("dataFiles/encryptedLogins.rds")
 
-## Read in Attendance
+### Attendance
 encryptedAttendance <- readRDS("dataFiles/encryptedAttendance.rds")
 
-## Read in Gradebook
+### Gradebook
 encryptedGradeBook <- readRDS("dataFiles/encryptedGrades.rds")
+
 
 # Set Up WebAccess (From Robert Carey) ----
 redir_js <- "shinyjs.login = function(uri){ location.replace(uri[0]); }"
@@ -380,6 +383,7 @@ server <- function(input, output, session) {
 
       if (authorized()) {
         auth <- decode_jwt(authorization())
+        logins <- unserialize(aes_cbc_decrypt(encyptedLogins, key = LOGKEY))
         userName(
           strsplit(
             x = auth$payload$upn,
